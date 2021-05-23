@@ -40,7 +40,13 @@ public class security extends WebSecurityConfigurerAdapter {
             .formLogin()////로그인 발생시
             .loginPage("/auth/loginpage")///로그인페이지 지정
             .loginProcessingUrl("/auth/loginprocess")//여기로된링크를 가로채서    protected void configure(AuthenticationManagerBuilder auth) 에서 검사한다
-            .defaultSuccessUrl("/auth/boardlist");//성공시 여기로보낸다
+            .defaultSuccessUrl("/auth/boardlist")//성공시 여기로보낸다
+        .and()
+            .logout()
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/auth/boardlist");///성공한다면 여기
+            //////////링크 앞에 항상 /붙여야함
+        
             
     }
 }
