@@ -47,7 +47,9 @@
         }
     })
     $('#button').click(function(){
-        $.ajax({
+       if($('#npwd').val().length>=4&&$('#npwd2').val().length>=4)
+       {
+         $.ajax({
             type:"post",
             url:"/updatepwdpageprocess",
             data:{
@@ -62,13 +64,26 @@
               {
                 location.href="/mypage";
               }
+              else if($.trim(data)=="npwd!=npwd2")
+              {
+               alert('새 비밀번호가 일치하지 않습니다');
+              }
+              else if($.trim(data)=="wrongpwd")
+              {
+               alert('현재 비밀번호가 틀립니다');
+              }
               else
               {
-                alert('양식을 맞춰주세요');
+                alert('문제가 생겨 다시 시도 해 주세요');
               }   
             }
 
         })
+       }
+       else
+       {
+          alert('빈칸이 있거나 비밀번호가 짧습니다');
+       }
     })
   })
   function backgroundcolor(id,color)

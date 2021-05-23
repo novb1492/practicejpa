@@ -33,7 +33,7 @@ public class restcontroller {
                 }
             }
             else{
-                return "no";
+                return "wrongpwd";
             }
         }
         else{
