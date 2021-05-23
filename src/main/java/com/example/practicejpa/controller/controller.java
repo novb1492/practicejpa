@@ -5,8 +5,11 @@ import com.example.practicejpa.servies.userservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class controller {
@@ -46,4 +49,18 @@ public class controller {
     
         return "boardlist";
     }
+    @GetMapping("mypage")
+    public String mypage(Model model) {
+    
+        uservo uservo=userservice.getinfor();
+        model.addAttribute("uservo", uservo);
+        return "mypage";
+    }
+    @GetMapping("updatepwdpage")
+    public String updatepwdpage() {
+    
+        return "updatepwdpage";
+    }
+
+    
 }

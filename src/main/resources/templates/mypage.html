@@ -8,9 +8,15 @@
     <title>Document</title>
 </head>
 <body>
-<div th:text="'email:'+'&nbsp'+${session.email}"></div><!--th 자동줄바꿈이 되는거같다-->
-<a href="/updatepwdpage">비밀번호 변경하러 가기</a>
+    email
+    <div sec:authentication="name"></div>
+    이름
+    <div th:text="${uservo.getName()}"></div>
+    가입일
+    <div th:text="${uservo.getCreated()}"></div>
+    <br>
+    <a href="/updatepwdpage">비밀번호 변경하러 가기</a>
+
 <br>
-<div th:text="'name:'+'&nbsp'+${session.name}"></div>
 </body>
 </html>

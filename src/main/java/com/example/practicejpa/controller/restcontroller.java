@@ -19,4 +19,27 @@ public class restcontroller {
         String yesorno=userservice.checkemail(email);
         return yesorno;
     }
+    @PostMapping("updatepwdpageprocess")
+    public String updatepwdpageprocess(@RequestParam("email")String email,@RequestParam("pwd")String pwd,@RequestParam("npwd")String npwd,@RequestParam("npwd2")String npwd2) {
+       
+        if(npwd.equals(npwd2)){
+            if(userservice.checkpwdwithdbpwd(pwd, email)){
+
+                if(userservice.updatepwd(email, npwd2)){
+                    return "yes";
+                }
+                else{
+                    return "error";
+                }
+            }
+            else{
+                return "no";
+            }
+        }
+        else{
+            return "npwd!=npwd2";
+        }
+    }
+  
+    
 }

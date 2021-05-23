@@ -7,8 +7,11 @@ import com.example.practicejpa.models.usermodel.userdao;
 import com.example.practicejpa.models.usermodel.uservo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class userservice {
@@ -21,7 +24,7 @@ public class userservice {
 
     public String checkemail(String email) {
 
-        System.out.println(email+"userid");
+        System.out.println(email+"중복검사");
         Optional<uservo> vo=userdao.findById(email);
         if(vo.isEmpty())///일단 학원가기전까지는 이방법이 제일 편리 한거같다 20200514
         {
@@ -43,6 +46,38 @@ public class userservice {
         }
         
         return false;
+    }
+
+    public uservo getinfor() {
+        Object principal=SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails details=(UserDetails)principal;
+        System.out.println(details.getUsername()+"조회이메일");
+        uservo uservo=userdao.findById(details.getUsername()).orElseThrow();
+        System.out.println(uservo.getName()+"다녀왔니");
+        return uservo;
+    }
+    public boolean checkpwdwithdbpwd(String pwd,String email) 
+    {
+        BCryptPasswordEncoder bCryptPasswordEncoder=security.encoderpwd();
+        String dbpwd=userdao.getpwd(email);
+        if(bCryptPasswordEncoder.matches(pwd, dbpwd))
+        {
+            return true;
+        }
+        return false;
+    }
+    @Transactional
+    public boolean updatepwd(String email,String pwd) {
+
+        try {
+            BCryptPasswordEncoder bCryptPasswordEncoder=security.encoderpwd();
+            String hashpwd=bCryptPasswordEncoder.encode(pwd);
+            uservo uservo=userdao.findById(email).orElseThrow();
+            uservo.setPwd(hashpwd);
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return true;
     }
 
 }
