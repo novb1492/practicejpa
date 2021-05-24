@@ -9,6 +9,8 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="/auth/index">홈</a>
+    <br>
     <div th:text="${session.email}"></div>
 
     <div th:with="vo= ${boardvo}" >
@@ -28,6 +30,8 @@
                 </form>
                 </div>
                 <div id="errorcomment"></div>  
+            <br>
+            <a href="/auth/boardlist">게시판</a>
             <br>
             댓글
             <div th:if="${session.email!=null}">

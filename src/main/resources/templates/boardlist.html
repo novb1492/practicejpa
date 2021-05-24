@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>게시판</title>
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
     <div sec:authorize="!isAuthenticated()"><!--${session.email}세션을 이렇게 model로 안넘겨도 그냥 바로 꺼내쓸수 있다 20210515 편리하다-->
@@ -20,7 +21,62 @@
             <a href="/writearticle">글쓰기</a>
             <a href="/logout">로그아웃</a><!--링크 앞에 항상 /붙여야함-->
         </div>
+<table>
+<tr>
+    <th>순서</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일자</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="list : ${array}">
+        <td th:text="${list.getBid()}"></td>
+        <td ><a th:href="@{content(bid=${list.getBid})}" th:text="${list.getTitle}"></a></td> <!--후아 th 진짜 jspl에비해 쓰레기다 진짜 링크거는것도 찾는라 힘들었네 웃기네20210516-->
+        <td th:text="${list.getEmail}"></td>
+        <td th:text="${list.getCreated}"></td>
+        <td th:text="${list.getHit}"></td>
+    </tr>
+</table>
 
+<div id=page th:text="'현재 페이지'+${page}"></div>
+
+<div th:if="${page}<${totalpages}">
+    
+<form action="/auth/boardlist?page=2">
+<input type="submit" value="다음">
+</form>
+</div>
+
+<div th:if="${page}>1">
+<input type="button" id="beforebutton" value="이전">
+</div>
+
+<script>
+$(function(){
+
+$('#nextbutton').click(function(){
+    $.ajax({
+        type:"post",
+            url:"/auth/boardlist",
+            data:{
+              "page":$('#page').val()
+            },
+            success:function(data){
+              console.log(data);
+              if($.trim(data)=="yes")
+              {
+                location.href=""
+              }
+              else
+              {
+                    alert('마지막 페이지 입니다');
+              }    
+            }
+    })
+})
+
+})
+</script>
 <!--<table>
     <tr>
         <th>순서</th>
@@ -38,7 +94,7 @@
     </tr>
 </table>
 <div th:each="num: ${#numbers.sequence(1,pages)}">
-    <a th:href="@{boardlist(page=${num})}">[[${num}]]</a>-->
-</div>
+    <a th:href="@{boardlist(page=${num})}">[[${num}]]</a>
+</div>-->
 </body>
 </html>
